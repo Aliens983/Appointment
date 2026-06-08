@@ -63,15 +63,35 @@ const loading = ref(false)
 const submitting = ref(false)
 const slot = ref(null)
 
-const form = reactive({ topic: '', description: '', urgency: 'normal', isAnonymous: false, contactPhone: '' })
+const form = reactive({
+  topic: '',
+  description: '',
+  urgency: 'normal',
+  isAnonymous: false,
+  contactPhone: ''
+})
 const rules = {
-  topic: [{ required: true, min: 1, max: 30, message: '请输入 1-30 字主题', trigger: 'blur' }]
+  topic: [{ required: true, min: 1, max: 30, message: '请输入 1-30 字主题', trigger: 'blur' }],
+  contactPhone: [
+    {
+      validator: (_r, v, cb) => {
+        if (form.isAnonymous) return cb()
+        if (!v) return cb(new Error('请输入联系电话'))
+        if (!/^1[3-9]\d{9}$/.test(v)) return cb(new Error('手机号格式不正确'))
+        cb()
+      },
+      trigger: 'blur'
+    }
+  ]
 }
 
 async function loadSlot() {
   loading.value = true
   try {
     const counselorId = Number(route.query.counselorId)
+    // 同步隐私设置:若用户开启了默认匿名,自动开启匿名
+    const defAnon = !!store.state.user.profile?.defaultAnonymous
+    form.isAnonymous = defAnon
     // 通过所有咨询师查到该 slot
     // 这里简化:从 store 中找
     const all = store.state.counselor.currentSlots

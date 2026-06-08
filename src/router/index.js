@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import store from '@/store'
 
-// 14 条路由(含 5 条带参)
+// 全部路由
 const routes = [
   { path: '/', name: 'Home', component: () => import('@/views/Home.vue'), meta: { title: '首页' } },
   { path: '/login', name: 'Login', component: () => import('@/views/Login.vue'), meta: { title: '登录', hideInMenu: true } },
