@@ -13,8 +13,18 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue'
+import { useStore } from 'vuex'
 import AppHeader from '@/components/AppHeader.vue'
 import AppFooter from '@/components/AppFooter.vue'
+
+const store = useStore()
+// 启动时若有 token,拉取一次用户资料,确保头像/昵称/隐私设置最新
+onMounted(() => {
+  if (store.getters['user/isLoggedIn']) {
+    store.dispatch('user/loadProfile').catch(() => {})
+  }
+})
 </script>
 
 <style scoped>

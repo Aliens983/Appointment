@@ -27,7 +27,8 @@ export function setupMock(axiosInstance) {
     const { username, password } = JSON.parse(config.data)
     const user = db.users.find(u => u.username === username && u.password === password)
     if (!user) return fail(2001, '用户名或密码错误')
-    const { password: _p, ...profile } = user
+    const profile = { ...user }
+    delete profile.password
     return ok({ token: 'mock-token-' + user.userId, ...profile })
   })
 
@@ -36,7 +37,6 @@ export function setupMock(axiosInstance) {
     if (db.users.some(u => u.username === body.username)) return fail(2001, '用户名已存在')
     const user = { userId: db.genId(100), password: body.password, avatar: '', studentNo: '', phone: '', gender: 'other', defaultAnonymous: false, createdAt: dayjs().format('YYYY-MM-DDTHH:mm:ss+08:00'), ...body }
     db.users.push(user)
-    const { password: _p, ...profile } = user
     return ok({ userId: user.userId, username: user.username })
   })
 
@@ -46,7 +46,8 @@ export function setupMock(axiosInstance) {
     const userId = Number(String(token).replace('mock-token-', ''))
     const user = db.users.find(u => u.userId === userId)
     if (!user) return fail(1001, 'token 失效')
-    const { password: _p, ...profile } = user
+    const profile = { ...user }
+    delete profile.password
     return ok(profile)
   })
 
