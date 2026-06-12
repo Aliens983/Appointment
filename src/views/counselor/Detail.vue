@@ -87,7 +87,11 @@ async function load() {
 
 function onPickSlot(s) {
   if (!s.available) return
-  router.push({ path: '/login', query: { redirect: `/appointment/form/${s.slotId}` } })
+  if (!store.getters['user/isLoggedIn']) {
+    router.push({ path: '/login', query: { redirect: `/appointment/form/${s.slotId}?counselorId=${route.params.id}` } })
+  } else {
+    router.push({ path: `/appointment/form/${s.slotId}`, query: { counselorId: route.params.id } })
+  }
 }
 
 function goBook() {
