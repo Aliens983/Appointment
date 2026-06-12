@@ -804,7 +804,7 @@
 - MySQL 8.x(主数据库)
 - Redis 7.x(可选,缓存字典与黑名单 token)
 - Lombok(简化代码)
-- springdoc-openapi-starter-webmvc-ui 2.x(Swagger 文档)
+- Knife4j(OpenAPI 文档)
 - Validation(参数校验,jakarta.validation)
 - JUnit 5 + Mockito(单元测试)
 - Maven 3.8+(构建工具)
